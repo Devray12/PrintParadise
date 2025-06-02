@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - PrintParadise</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Press+Start+2P&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">
+                <h1>PrintParadise</h1>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li class="cart-icon">
+                    <a href="cart.html" class="active">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="cart-page">
+        <section class="cart-header">
+            <h1>Your Shopping Cart</h1>
+        </section>
+
+        <section class="cart-content">
+            <div class="cart-items">
+                <!-- Cart items will be dynamically loaded here -->
+            </div>
+
+            <div class="cart-summary">
+                <h2>Order Summary</h2>
+                <div class="summary-item">
+                    <span>Subtotal:</span>
+                    <span class="subtotal">$0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span>Shipping:</span>
+                    <span class="shipping">$5.99</span>
+                </div>
+                <div class="summary-item total">
+                    <span>Total:</span>
+                    <span class="total-amount">$0.00</span>
+                </div>
+                <button class="checkout-button">Proceed to Checkout</button>
+                <a href="shop.html" class="continue-shopping">Continue Shopping</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>PrintParadise</h3>
+                <p>Your destination for premium anime art and merchandise.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 PrintParadise. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Cart-specific JavaScript
+        function updateCartDisplay() {
+            const cartItems = document.querySelector('.cart-items');
+            const subtotalElement = document.querySelector('.subtotal');
+            const totalElement = document.querySelector('.total-amount');
+            const shippingCost = 5.99;
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart"><p>Your cart is empty</p></div>';
+                subtotalElement.textContent = '$0.00';
+                totalElement.textContent = '$0.00';
+                return;
+            }
+
+            let subtotal = 0;
+            cartItems.innerHTML = cart.map(item => {
+                subtotal += item.price * item.quantity;
+                return `
+                    <div class="cart-item" data-id="${item.id}">
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="item-details">
+                            <h3>${item.name}</h3>
+                            <p class="price">$${item.price.toFixed(2)}</p>
+                        </div>
+                        <div class="quantity-controls">
+                            <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                            <span>${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                        </div>
+                        <button class="remove-item" onclick="removeFromCart(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+            totalElement.textContent = `$${(subtotal + shippingCost).toFixed(2)}`;
+        }
+
+        // Initialize cart display
+        document.addEventListener('DOMContentLoaded', updateCartDisplay);
+
+        // Handle checkout button
+        document.querySelector('.checkout-button').addEventListener('click', () => {
+            if (cart.length === 0) {
+                showNotification('Your cart is empty!');
+                return;
+            }
+            // In a real application, this would redirect to a checkout page
+            showNotification('Proceeding to checkout...');
+        });
+    </script>
+</body>
+</html> 
